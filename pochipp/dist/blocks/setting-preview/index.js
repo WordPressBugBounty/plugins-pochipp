@@ -1,0 +1,1 @@
+(()=>{"use strict";const e=window.wp.blocks,t=JSON.parse('{"apiVersion":2,"name":"pochipp/setting-preview","title":"Setting Preview","supports":{"inserter":false},"Y":{"meta":{"type":"string","default":""}}}'),{apiVersion:i,name:s,title:p,supports:r}=t;(0,e.registerBlockType)(s,{apiVersion:i,title:p,supports:r,attributes:t.Y,edit:()=>null,save:()=>null})})();

@@ -1,0 +1,229 @@
+.post-type-pochipps .block-editor-block-contextual-toolbar-wrapper {
+	display: none;
+}
+
+// 設定用ブロック
+.pochipp-block--setting {
+	max-width: 820px !important;
+	padding: 16px 24px 24px;
+	background-color: #fdfdfd;
+	box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+
+	// &::after {
+	// 	content: none !important;
+	// }
+
+	.__preview {
+		margin: 0;
+		padding: 8px 0;
+
+		.pochipp-box {
+			margin: 0 !important;
+		}
+
+		&.-null {
+			padding: 24px;
+			text-align: center;
+			border: solid 1px #e8e8e8;
+
+			p {
+				margin: 0 !important;
+			}
+		}
+
+		.__helpText {
+			color: #666;
+			font-size: 12px;
+			text-align: right;
+
+			&.-with-margin {
+				margin-top: 8px;
+			}
+		}
+	}
+
+	&[data-sticky="1"] .__preview {
+		position: sticky;
+		top: 0;
+		z-index: 99;
+		background-color: rgba(#fff, 0.8);
+
+		.__helpText {
+			display: none;
+		}
+	}
+
+	.__settings {
+		margin-top: 24px;
+	}
+
+	.__btns {
+		display: flex;
+		justify-content: space-between;
+
+		&.-updating {
+			pointer-events: none;
+
+			.__searchBtn {
+				opacity: 0.5;
+			}
+
+			.__updateBtn svg {
+				animation: 2s linear infinite pchppRotation;
+			}
+		}
+	}
+
+	.__searchBtn {
+		display: flex;
+		justify-content: center !important;
+		width: 100%;
+		height: auto;
+		padding: 8px !important;
+		font-size: 16px;
+	}
+
+	.__updateBtn {
+		display: flex;
+		justify-content: center !important;
+		width: 100%;
+		height: auto;
+		margin-left: 16px;
+		padding: 8px !important;
+		font-size: 16px;
+	}
+
+	.__simpleLinkBtn {
+		display: flex;
+		justify-content: center !important;
+		width: 100%;
+		height: auto;
+		margin-left: 16px;
+		padding: 8px !important;
+		font-size: 16px;
+	}
+
+	.__tabs {
+		border-bottom: dashed 1px #dedede;
+		margin-top: 72px;
+
+		.__tablist {
+			display: flex;
+			font-size: 14px;
+			margin-bottom: -1px;
+
+			button {
+				margin-right: 8px;
+				padding: 0.5em 1em;
+				border-top: 4px solid #ccc;
+				border-left: 2px solid #ededed;
+				border-right: 2px solid #ededed;
+				border-bottom: none;
+				background-color: #ededed;
+				cursor: pointer;
+
+				&:hover,
+				&.-selected {
+					background-color: #fff;
+					border-top: 4px solid var(--wp-admin-theme-color);
+					border-left: 2px solid #ddd;
+					border-right: 2px solid #ddd;
+					border-top-right-radius: 4px;
+					border-top-left-radius: 4px;
+				}
+			}
+		}
+	}
+
+	.__fields {
+		margin-top: 24px;
+
+		.components-base-control {
+			margin: 24px 0 0;
+			padding-right: 2px;
+
+			&.__searchResultCheck {
+				margin: 12px 0 0;
+			}
+
+			&.-radio {
+
+				.components-base-control__field {
+					display: flex;
+					flex-wrap: wrap;
+				}
+
+				.components-base-control__label {
+					flex-basis: 100%;
+				}
+
+				.components-radio-control__option {
+					margin-right: 16px;
+					margin-bottom: 8px;
+				}
+			}
+		}
+
+		.__textArea {
+			display: flex;
+			align-items: center;
+			margin-top: 8px;
+
+			&.-fullWidth {
+				margin-top: 8px;
+
+				input {
+					flex: 1 1 auto;
+				}
+			}
+
+			span {
+				// min-width: 5.5em;
+				padding-right: 0.5em;
+				padding-left: 1em;
+
+				&.__nami {
+					display: inline-block;
+					padding: 4px 8px;
+				}
+			}
+		}
+
+		.__alert {
+			margin: 0.5em 0;
+			color: #d63638;
+		}
+
+		.components-base-control__label {
+			display: block;
+			margin-bottom: 8px;
+			margin-left: 1px;
+			padding-left: 6px;
+			font-size: 14px;
+			line-height: 1.5;
+			border-left: 2px solid;
+
+			& ~ .components-base-control {
+				margin-top: 8px;
+			}
+		}
+	}
+
+	.__note {
+		color: #555;
+		font-size: 12px;
+
+		&::before {
+			margin-right: 4px;
+			content: "";
+		}
+	}
+
+
+	// 確認用 dump データ
+	.pochipp-block-dump {
+		padding: 20px;
+		font-size: 13px;
+		background: #f7f7f7;
+	}
+}

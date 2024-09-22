@@ -1,0 +1,26 @@
+language: "jp"
+early_access: false
+reviews:
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: true
+  review_status: true
+  collapse_walkthrough: false
+  path_filters:
+    - "**/*.php"
+    - "src/**/*.js"
+  path_instructions:
+    - path: "src/**/*.js"
+      instructions: "JavaScriptコードはWordPressのJavaScriptコーディング規約に従った内容でレビューを実施してください。"
+    - path: "**/*.php"
+      instructions: |
+        "PHPコードはWordPressのPHPコーディング規約に従った内容でレビューを実施してください。"
+  auto_review:
+    enabled: true
+    ignore_title_keywords:
+      - "WIP"
+    drafts: false
+    base_branches:
+      - "feat/*"
+chat:
+  auto_reply: true

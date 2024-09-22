@@ -1,0 +1,25 @@
+.pochipp-inline__btnwrap {
+
+	display: inline-flex;
+	margin: 0.5em 0.5em;
+
+	& > .pochipp-inline__btn {
+
+		display: inline-block;
+		width: var(--pchpp-inline-width, auto);
+		padding: 0.75em 1.5em;
+		overflow: hidden;
+		color: var(--pchpp-inline-txt-color, inherit);
+		font-size: 1em;
+		line-height: 1.5;
+		text-align: center;
+		text-decoration: none !important;
+		background-color: var(--pchpp-inline-bg-color, none);
+		border-radius: var(--pchpp-inline-radius, 0);
+		box-shadow: var(--pchpp-inline-shadow, none);
+
+		&:hover {
+			opacity: 0.8;
+		}
+	}
+}

@@ -1,0 +1,1 @@
+(()=>{var e;(e=jQuery)((function(){e(".pochipp-colorpicker").wpColorPicker({change(){const i=e(this);setTimeout((function(){i.trigger("change")}),10)},clear(){const i=e(this).prev().find("input");setTimeout((function(){i.trigger("change")}),10)}})}))})();

@@ -1,0 +1,153 @@
+/**
+ * Pochippの設定画面と商品登録ページでしか読み込まれないCSSファイル
+ */
+@use "./common/*";
+@use "./setting/*";
+
+@keyframes pchppRotation {
+
+	0% {
+		transform: rotate(0);
+	}
+
+	100% {
+		transform: rotate(-360deg);
+	}
+}
+
+
+// 設定ページエディター
+.post-type-pochipps {
+
+	.interface-interface-skeleton__content > .edit-post-visual-editor > .editor-styles-wrapper {
+		background: #e8e8e8;
+	}
+
+	.edit-post-visual-editor__post-title-wrapper {
+		display: block;
+		height: 1px;
+		visibility: hidden;
+		pointer-events: none;
+
+		div {
+			margin: 0 !important;
+		}
+	}
+
+}
+
+// 非フォーカス時からクリックするとなぜか最初のテキストフィールドにフォーカスが飛ぶのを防ぐ
+[data-type="pochipp/setting"]:not(.is-selected) .components-base-control.-custom-image {
+	pointer-events: none;
+}
+
+
+// 投稿一覧テーブル
+.manage-column#pid {
+	width: 4.5em;
+}
+
+.manage-column#pimg {
+	width: 56px;
+}
+
+.manage-column#searched_at {
+	width: 5em;
+}
+
+.manage-column#used_at {
+	width: 15em;
+}
+
+.manage-column#link_alive {
+	width: 8em;
+}
+
+.link_alive {
+	text-align: center;
+
+	a {
+		position: relative;
+
+		.link_alive__tooltip {
+			opacity: 0;
+			position: absolute;
+			visibility: hidden;
+			top: calc(100% + 4px);
+			right: 0;
+			width: 220px;
+			padding: 8px;
+			background: #666;
+			color: #fff;
+			text-align: left;
+			border-radius: 8px;
+			transition: all 0.2s ease-in-out;
+		}
+
+		&:hover .link_alive__tooltip {
+			opacity: 1;
+			visibility: visible;
+		}
+	}
+
+	.link_alive__content {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
+}
+
+td.column-pimg {
+
+	img {
+		display: block;
+		width: 48px;
+		height: auto;
+	}
+}
+
+td.used_at.column-used_at {
+	display: flex;
+	flex-wrap: wrap;
+
+	.pchpp-usepage {
+
+		position: relative;
+		display: block;
+		margin: 4px;
+		padding: 4px;
+		color: #09648f;
+		font-size: 13px;
+		line-height: 1;
+		border: solid 1px #09648f;
+		border-radius: 2px;
+
+		&::after {
+			position: absolute;
+			right: -24px;
+			bottom: 32px;
+			z-index: 1;
+			display: block;
+			width: max-content;
+			min-height: 1em;
+			padding: 8px;
+			color: #48545f;
+			background-color: #fff;
+			border-radius: 4px;
+			box-shadow: 2px 2px 8px 1px #dcdcdc;
+			opacity: 0;
+			transition: 0.25s;
+			content: attr(data-title);
+			pointer-events: none;
+		}
+
+		&:hover {
+			color: #fff;
+			background-color: #09648f;
+
+			&::after {
+				opacity: 1;
+			}
+		}
+	}
+}
