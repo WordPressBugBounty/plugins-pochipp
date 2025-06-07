@@ -35,10 +35,11 @@ function admin_scripts( $hook_suffix ) {
 
 	$is_pochipp_menu = false !== strpos( $hook_suffix, 'pochipp' );
 	$is_editor_page  = 'post.php' === $hook_suffix || 'post-new.php' === $hook_suffix;
+	$is_pattern_page = 'site-editor.php' === $hook_suffix;
 	$is_columns_page = 'edit.php' === $hook_suffix && \POCHIPP::POST_TYPE_SLUG === $post_type;
 
 	// 編集画面 or 設定ページでのみ読み込む
-	if ( $is_editor_page || $is_pochipp_menu ) {
+	if ( $is_editor_page || $is_pochipp_menu || $is_pattern_page ) {
 
 		// メディアアップローダー
 		wp_enqueue_script( 'media-editor' );
@@ -91,5 +92,10 @@ function block_assets() {
 	global $post_type;
 	if ( \POCHIPP::POST_TYPE_SLUG === $post_type ) {
 		wp_enqueue_style( 'pochipp-setting', POCHIPP_URL . 'dist/css/setting.css', [], \POCHIPP::$version );
+	}
+
+	// カスタムスタイルをインラインで追加（site-editor対応）
+	if ( 'site-editor' === get_current_screen()->base ) {
+		wp_add_inline_style( 'pochipp-blocks', \POCHIPP\get_custom_style() );
 	}
 }
