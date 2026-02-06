@@ -2,8 +2,8 @@
 Contributors: wppochipp
 Tags: affiliate, block
 Requires at least: 5.6
-Tested up to: 6.8
-Stable tag: 1.17.1
+Tested up to: 6.9
+Stable tag: 1.18.5
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -36,6 +36,11 @@ https://pochipp.com/
 WebSite: https://affiliate.amazon.co.jp/assoc_credentials/home
 Terms: https://affiliate.amazon.co.jp/help/operating/paapilicenseagreement
 
+= Amazon Creaters API =
+
+WebSite: https://affiliate.amazon.co.jp/help/operating/paapilicenseagreement
+Terms: https://affiliate.amazon.co.jp/help/operating/paapilicenseagreement
+
 
 = Rakuten API =
 
@@ -64,6 +69,35 @@ Terms: https://af.moshimo.com/af/www/terms/shop
 
 
 == Changelog ==
+
+= 1.18.5 =
+
+- Amazon Creaters APIにパラメータを追加
+
+= 1.18.4 =
+
+- Amazon PA API設定項目の削除
+
+= 1.18.3 =
+
+- Creaters API設定の追加
+
+= 1.18.2 =
+
+- プラグインの有効化時エラー修正
+
+= 1.18.1 =
+
+- 商品情報定期更新の処理修正対応
+
+= 1.18.0 =
+
+- WordPress 6.9対応
+
+= 1.17.3 =
+
+- 他プラグインとの競合による表示不備修正
+- バリデーションの追加
 
 = 1.17.1 =
 

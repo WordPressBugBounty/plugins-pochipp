@@ -122,7 +122,7 @@ function output_custom_post_columns( $column_name, $post_id ) {
 					<div class="link_alive__tooltip">
 						リンク切れチェックは以下の方法で検索した場合のみ利用可能です。
 						<br />
-						・Amazon PA-API
+						・Amazon API
 						<br />
 						・楽天API
 					</div>

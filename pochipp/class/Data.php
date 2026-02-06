@@ -47,8 +47,10 @@ class Data {
 		'yahoo_5campaign_text'   => '商品券4%還元！',
 		'sale_text_effect'       => 'flash',
 
-		'amazon_traccking_id'    => '',
-		'rakuten_affiliate_id'   => '',
+		'amazon_traccking_id'           => '',
+		'amazon_creators_client_id'     => '',
+		'amazon_creators_client_secret' => '',
+		'rakuten_affiliate_id'          => '',
 		'yahoo_linkswitch'       => '',
 		'mercari_ambassador_id'  => '',
 		'moshimo_amazon_aid'     => '',

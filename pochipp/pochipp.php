@@ -4,7 +4,7 @@
  * Plugin URI: https://pochipp.com/
  * Description: Amazon・楽天市場・Yahooショッピングなどのアフィリエイトリンクを簡単に作成・管理できる、ブロックエディターに最適化されたプラグインです。
  * Author: ひろ
- * Version: 1.17.1
+ * Version: 1.18.5
  * Author URI: https://twitter.com/hiro_develop127
  * Text Domain: pochipp
  * License: GPL3 or later
@@ -60,18 +60,24 @@ class POCHIPP extends \POCHIPP\Data {
 			require_once POCHIPP_PATH . 'inc/paapi5/SearchItemsRequest.php';
 		}
 
+		if ( ! class_exists( '\POCHIPP\CreatorsApiClient' ) ) {
+			require_once POCHIPP_PATH . 'inc/creatorsapi/CreatorsApiClient.php';
+			require_once POCHIPP_PATH . 'inc/creatorsapi/functions.php';
+		}
+
 		add_action( 'init', [ $this, 'set_setting_data' ], 1 );
 		add_action( 'after_setup_theme', [ $this, 'load_pluggable' ], 99 );
 
 		require_once POCHIPP_PATH . 'inc/enqueues.php';
 		require_once POCHIPP_PATH . 'inc/output.php';
-		require_once POCHIPP_PATH . 'inc/notice.php';
 		require_once POCHIPP_PATH . 'inc/register_pt.php';
 		require_once POCHIPP_PATH . 'inc/register_tax.php';
 		require_once POCHIPP_PATH . 'inc/register_meta.php';
+		require_once POCHIPP_PATH . 'inc/common/auto_update.php';
 		require_once POCHIPP_PATH . 'inc/render_inline_element.php';
 		require_once POCHIPP_PATH . 'inc/register_blocks.php';
 		require_once POCHIPP_PATH . 'inc/register_shortcode.php';
+		require_once POCHIPP_PATH . 'inc/cron.php';
 		require_once POCHIPP_PATH . 'inc/ajax.php';
 
 		if ( is_admin() ) {
@@ -133,10 +139,19 @@ class POCHIPP extends \POCHIPP\Data {
 	}
 }
 
-
 /**
  * Start
  */
 add_action( 'plugins_loaded', function() {
 	new POCHIPP();
 }, 11 );
+
+register_activation_hook( __FILE__, function() {
+	require_once POCHIPP_PATH . 'inc/cron.php';
+	\POCHIPP\schedule_auto_update();
+} );
+
+register_deactivation_hook( __FILE__, function() {
+	require_once POCHIPP_PATH . 'inc/cron.php';
+	\POCHIPP\clear_auto_update_schedule();
+} );

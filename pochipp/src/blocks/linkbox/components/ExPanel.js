@@ -44,7 +44,7 @@ export default memo(({ clientId, isCount, cvKey, setAttributes }) => {
 
 	// meta取得
 	const [meta] = useEntityProp('postType', postType, 'meta');
-	const cvMetaData = meta[cvMetaKey];
+	const cvMetaData = meta?.[cvMetaKey];
 
 	const notFounded = <p>まだ計測データはありません。</p>;
 

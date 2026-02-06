@@ -17,11 +17,6 @@ function front_scripts() {
  */
 add_action( 'wp_footer', 'POCHIPP\front_scripts_footer' );
 function front_scripts_footer() {
-
-	// 自動アップデート
-	if ( \POCHIPP::$load_update_js ) {
-		wp_enqueue_script( 'pochipp-front', POCHIPP_URL . 'dist/js/update.js', [], \POCHIPP::$version, true );
-	}
 }
 
 

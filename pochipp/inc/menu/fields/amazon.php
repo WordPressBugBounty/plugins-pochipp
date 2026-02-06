@@ -7,47 +7,54 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 <div class="pchpp-setting__section_help">
 	<p>
 		※ ご利用前にAmazonの公式ドキュメントをご確認ください。<br>
-		<a href="https://affiliate.amazon.co.jp/help/operating/paapilicenseagreement" target="_blank" rel="noopener noreferrer">Amazon.co.jp Product Advertising API ライセンス契約</a>
+		<a href="https://affiliate.amazon.co.jp/help/operating/paapilicenseagreement" target="_blank" rel="noopener noreferrer">Amazon.co.jp API ライセンス契約</a>
 		/
 		<a href="https://affiliate.amazon.co.jp/help/operating/agreement" target="_blank" rel="noopener noreferrer">Amazonアソシエイト・プログラム運営規約</a>
 		/
 		<a href="https://affiliate.amazon.co.jp/help/node" target="_blank" rel="noopener noreferrer">Amazonアソシエイトに関するヘルプページ</a>
 	</p>
 	<div class="__helpLink">
-		PA-APIの認証キーやトラッキングIDの設定方法は<a href="https://pochipp.com/200/" target="_blank" rel="noopener noreferrer" class="dashicons-before dashicons-book-alt">こちらのページ</a>で解説しています。
+		Amazon APIの設定方法は<a href="https://pochipp.com/200/" target="_blank" rel="noopener noreferrer" class="dashicons-before dashicons-book-alt">こちらのページ</a>で解説しています。
 	</div>
 </div>
-<h3 class="pchpp-setting__h3">検索設定</h3>
+
+<?php
+// PA-API設定値をhiddenで保持（UI非表示）
+\POCHIPP::output_hidden(['key' => 'amazon_access_key']);
+\POCHIPP::output_hidden(['key' => 'amazon_secret_key']);
+?>
+
+<h3 class="pchpp-setting__h3">Creators API設定</h3>
 <p class="pchpp-setting__p">
-	AmazonのAPIを使って商品検索をするためには、「<a href="https://affiliate.amazon.co.jp/assoc_credentials/home" target="_blank" rel="noopener noreferrer">Amazon Product Advertising API</a>」の「認証キー」が必要です。
+	認証情報は「<a href="https://affiliate.amazon.co.jp/creatorsapi" target="_blank" rel="noopener noreferrer">Creators API</a>」のページから取得できます。
 	<br>
-	認証キーを取得後、「アクセスキー」と「シークレットキー」を設定してください。
+	アプリケーションを作成の上で、「認証情報ID」と「シークレット」を設定してください。
+	<br>
 </p>
-<div class="pchpp-setting__div amazon-search">
+<div class="pchpp-setting__div amazon-creators">
 	<dl class="pchpp-setting__dl">
-		<dt>アクセスキー</dt>
+		<dt>認証情報ID</dt>
 		<dd>
 			<?php
 				\POCHIPP::output_text_field([
-					'key'   => 'amazon_access_key',
+					'key' => 'amazon_creators_client_id',
 				]);
 			?>
 			<span class="errMessage"></span>
 		</dd>
 	</dl>
 	<dl class="pchpp-setting__dl">
-		<dt>シークレットキー</dt>
+		<dt>シークレット</dt>
 		<dd>
 			<?php
 				\POCHIPP::output_text_field([
-					'key'   => 'amazon_secret_key',
+					'key' => 'amazon_creators_client_secret',
 				]);
 			?>
 			<span class="errMessage"></span>
 		</dd>
 	</dl>
 </div>
-
 
 <h3 class="pchpp-setting__h3">アフィリエイト設定</h3>
 <p class="pchpp-setting__p">

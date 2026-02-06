@@ -42,7 +42,8 @@ function search_from_amazon_api() {
 
 
 /**
- * AmazonAPI (PA-APIv5) から商品データをキーワード検索
+ * Amazon APIから商品データをキーワード検索
+ * Creators APIが設定されている場合はそちらを優先
  */
 function get_searched_data_from_amazon_api( $keywords = '', $search_index = 'All' ) {
 
@@ -56,22 +57,103 @@ function get_searched_data_from_amazon_api( $keywords = '', $search_index = 'All
 		];
 	}
 
-	$request              = new \SearchItemsRequest();
-	$request->SearchIndex = $search_index;
-	$request->Keywords    = $keywords;
-	return \POCHIPP\get_data_from_amazon_api( 'SearchItems', $request, $keywords );
+	// Creators API優先
+	if ( \POCHIPP\is_creators_api_available() ) {
+		return \POCHIPP\get_searched_data_from_creators_api( $keywords, $search_index );
+	}
+
+	// PA-APIにフォールバック
+	if ( \POCHIPP\is_paapi_available() ) {
+		$request              = new \SearchItemsRequest();
+		$request->SearchIndex = $search_index;
+		$request->Keywords    = $keywords;
+		return \POCHIPP\get_data_from_amazon_api( 'SearchItems', $request, $keywords );
+	}
+
+	return [
+		'error' => [
+			'code'    => 'no_api_configured',
+			'message' => 'Amazon APIの設定がありません。',
+		],
+	];
+}
+
+/**
+ * Creators APIから商品データをキーワード検索
+ */
+function get_searched_data_from_creators_api( $keywords = '', $search_index = 'All' ) {
+	$client = \POCHIPP\get_creators_api_client();
+
+	if ( ! $client ) {
+		return [
+			'error' => [
+				'code'    => 'client_error',
+				'message' => 'Creators APIクライアントの初期化に失敗しました。',
+			],
+		];
+	}
+
+	$response = $client->search_items( $keywords, $search_index );
+
+	if ( isset( $response['error'] ) ) {
+		return $response;
+	}
+
+	// レスポンスデータを整形
+	return \POCHIPP\set_item_data_by_creators_api( $response, $keywords );
 }
 
 
 /**
- * AmazonAPI (PA-APIv5) から商品データを単体検索
+ * Amazon APIから商品データを単体検索
+ * Creators APIが設定されている場合はそちらを優先
  */
 add_filter( 'get_amazon_item_data', '\POCHIPP\get_item_data_from_amazon_api' );
 function get_item_data_from_amazon_api( $asin ) {
 
-	$request          = new \GetItemsRequest();
-	$request->ItemIds = [ $asin ];
-	return \POCHIPP\get_data_from_amazon_api( 'GetItems', $request );
+	// Creators API優先
+	if ( \POCHIPP\is_creators_api_available() ) {
+		return \POCHIPP\get_item_data_from_creators_api( $asin );
+	}
+
+	// PA-APIにフォールバック
+	if ( \POCHIPP\is_paapi_available() ) {
+		$request          = new \GetItemsRequest();
+		$request->ItemIds = [ $asin ];
+		return \POCHIPP\get_data_from_amazon_api( 'GetItems', $request );
+	}
+
+	return [
+		'error' => [
+			'code'    => 'no_api_configured',
+			'message' => 'Amazon APIの設定がありません。',
+		],
+	];
+}
+
+/**
+ * Creators APIから商品データを単体検索
+ */
+function get_item_data_from_creators_api( $asin ) {
+	$client = \POCHIPP\get_creators_api_client();
+
+	if ( ! $client ) {
+		return [
+			'error' => [
+				'code'    => 'client_error',
+				'message' => 'Creators APIクライアントの初期化に失敗しました。',
+			],
+		];
+	}
+
+	$response = $client->get_items( [ $asin ] );
+
+	if ( isset( $response['error'] ) ) {
+		return $response;
+	}
+
+	// レスポンスデータを整形
+	return \POCHIPP\set_item_data_by_creators_api( $response );
 }
 
 
@@ -102,7 +184,7 @@ function get_data_from_amazon_api( $operation, $request, $keywords = '' ) {
 		'ItemInfo.ByLineInfo',
 		'ItemInfo.Classifications',
 		'ItemInfo.ProductInfo',
-		'Offers.Listings.Price',
+		'OffersV2.Listings.Price',
 		'ParentASIN',
 	];
 
@@ -234,7 +316,7 @@ function set_item_data_by_amazon_api( $result_data, $keywords = '' ) {
 		// $data['amazon_detail_url'] = 'https://www.amazon.co.jp/dp/' . $asin;
 
 		// 価格
-		$price            = $item->Offers->Listings[0]->Price->Amount ?? '';
+		$price            = $item->OffersV2->Listings[0]->Price->Money->Amount ?? '';
 		$data['price']    = (string) $price;
 		$data['price_at'] = wp_date( 'Y/m/d H:i' );
 
@@ -293,4 +375,67 @@ function get_amazon_api_error_text( $code, $description ) {
 			break;
 	}
 	return $message;
+}
+
+
+/**
+ * Creators APIレスポンスを整形
+ *
+ * @param array $result_data APIレスポンスの結果データ
+ * @param string $keywords 検索キーワード（キーワード検索時のみ）
+ * @return array 整形された商品データ
+ */
+function set_item_data_by_creators_api( $result_data, $keywords = '' ) {
+
+	$items      = [];
+	$items_data = $result_data['items'] ?? [];
+
+	foreach ( $items_data as $item ) {
+
+		$data = [];
+
+		// キーワード検索の時だけ取得するデータ群
+		if ( $keywords ) {
+			$data = [
+				'keywords'    => $keywords,
+				'searched_at' => 'amazon',
+			];
+
+			$data['asin'] = $item['asin'] ?? '';
+
+			// 商品名
+			$data['title'] = $item['itemInfo']['title']['displayValue'] ?? '';
+
+			// ブランド名
+			$brand        = $item['itemInfo']['byLineInfo']['brand']['displayValue'] ?? '';
+			$data['info'] = $brand;
+
+			// ブランド名なければ、著者名などの情報
+			if ( ! $brand ) {
+				$contributors      = '';
+				$contributors_data = $item['itemInfo']['byLineInfo']['contributors'] ?? [];
+				foreach ( $contributors_data as $obj ) {
+					if ( '' !== $contributors ) {
+						$contributors .= ', ';
+					}
+					$contributors .= ( $obj['role'] ?? '' ) . ':' . ( $obj['name'] ?? '' );
+				}
+				$data['info'] = $contributors;
+			}
+		}
+
+		// 商品詳細 アフィURL
+		$data['amazon_affi_url'] = $item['detailPageURL'] ?? '';
+
+		// 価格
+		$price            = $item['offersV2']['listings'][0]['price']['money']['amount'] ?? '';
+		$data['price']    = (string) $price;
+		$data['price_at'] = wp_date( 'Y/m/d H:i' );
+
+		// 画像URL
+		$data['image_url'] = $item['images']['primary']['large']['url'] ?? '';
+
+		$items[] = $data;
+	}
+	return $items;
 }

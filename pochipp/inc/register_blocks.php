@@ -379,10 +379,6 @@ function render_pochipp_block( $title = '', $pdata = [] ) {
 	if ( $pdata['isCount'] && $pdata['cvKey'] ) {
 		$ex_props .= ' data-cvkey="' . esc_attr( $pdata['cvKey'] ) . '"';
 	}
-	if ( $pid && \POCHIPP::should_periodic_update( $pdata ) ) {
-		$ex_props                .= ' data-auto-update="true"';
-		\POCHIPP::$load_update_js = true;
-	}
 
 	// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 	?>
