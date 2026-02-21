@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 <h3 class="pchpp-setting__h3">検索設定</h3>
 <p class="pchpp-setting__p">
-	楽天APIを使って商品検索をするためには、<a href="https://webservice.rakuten.co.jp/" target="_blank" rel="noopener noreferrer">Rakuten Developers</a>から発行可能な「アプリID」の設定が必要です。
+	楽天APIを使って商品検索をするためには、<a href="https://webservice.rakuten.co.jp/" target="_blank" rel="noopener noreferrer">Rakuten Developers</a>から発行可能な「アプリID」と「アクセスキー」の設定が必要です。
 </p>
 <div class="pchpp-setting__div rakuten-appid">
 	<dl class="pchpp-setting__dl">
@@ -25,6 +25,17 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 			<?php
 				\POCHIPP::output_text_field([
 					'key'   => 'rakuten_app_id',
+				]);
+			?>
+			<span class="errMessage"></span>
+		</dd>
+	</dl>
+	<dl class="pchpp-setting__dl">
+		<dt>アクセスキー</dt>
+		<dd>
+			<?php
+				\POCHIPP::output_text_field([
+					'key'   => 'rakuten_access_key',
 				]);
 			?>
 			<span class="errMessage"></span>

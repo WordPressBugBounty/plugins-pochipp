@@ -94,18 +94,38 @@ function get_data_from_rakuten_api( $api_query, $keywords = '' ) {
 		];
 	}
 
-	$request_url  = 'https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706';
-	$request_url .= '?applicationId=' . \POCHIPP::get_setting( 'rakuten_app_id' ); // アプリID情報
+	$rakuten_app_id     = \POCHIPP::get_setting( 'rakuten_app_id' );
+	$rakuten_access_key = trim( (string) \POCHIPP::get_setting( 'rakuten_access_key' ) );
+
+	if ( $rakuten_access_key ) {
+		$request_url  = 'https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20220601';
+		$request_url .= '?applicationId=' . $rakuten_app_id; // アプリID情報
+		$request_url .= '&accessKey=' . rawurlencode( $rakuten_access_key ); // アクセスキー
+	} else {
+		$request_url  = 'https://app.rakuten.co.jp/services/api/IchibaItem/Search/20170706';
+		$request_url .= '?applicationId=' . $rakuten_app_id; // アプリID情報
+	}
+
 	$request_url .= $api_query; // その他の条件
 
 	// 楽天アフィID // memo: itemUrl もアフィURLになってしまう。
 	// $rakuten_affi_id = \POCHIPP::get_setting( 'rakuten_affiliate_id' );
 	// if ( $rakuten_affi_id ) { $api_query .= '&affiliateId=' . $rakuten_affi_id; }
 
-	$response = wp_remote_get( $request_url, [
-		// 'method'      => 'GET',
+	$request_args = [
 		'timeout' => 30,
-	] );
+	];
+
+	if ( $rakuten_access_key ) {
+		$home_url    = home_url( '/' );
+		$home_port   = wp_parse_url( $home_url, PHP_URL_PORT );
+		$origin_header = wp_parse_url( $home_url, PHP_URL_SCHEME ) . '://' . wp_parse_url( $home_url, PHP_URL_HOST ) . ( $home_port ? ':' . $home_port : '' );
+		$request_args['headers'] = [
+			'Origin' => $origin_header,
+		];
+	}
+
+	$response = wp_remote_get( $request_url, $request_args );
 
 	// エラーがあれば
 	if ( is_wp_error( $response ) ) {
@@ -218,6 +238,9 @@ function get_rakuten_api_error_text( $code = '', $description = '' ) {
 			switch ( $description ) {
 				case 'specify valid applicationId':
 					$message = 'アプリIDが指定されていません。';
+					break;
+				case 'specify valid accessKey':
+					$message = 'アクセスキーが指定されていないか、正しくありません。';
 					break;
 				case 'keyword parameter is not valid':
 					$message = 'キーワードを正しく設定してください。';

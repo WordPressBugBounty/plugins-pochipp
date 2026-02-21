@@ -50,6 +50,7 @@ class Data {
 		'amazon_traccking_id'           => '',
 		'amazon_creators_client_id'     => '',
 		'amazon_creators_client_secret' => '',
+		'rakuten_access_key'            => '',
 		'rakuten_affiliate_id'          => '',
 		'yahoo_linkswitch'       => '',
 		'mercari_ambassador_id'  => '',
