@@ -25,6 +25,30 @@ function check_ajax_nonce( $request_key = 'nonce', $nonce_key = '' ) {
 	return false;
 }
 
+/**
+ * ポチップ商品の作成・公開権限があるか
+ */
+function can_create_pochipp_item() {
+
+	$post_type_object = get_post_type_object( \POCHIPP::POST_TYPE_SLUG );
+
+	if ( ! $post_type_object || empty( $post_type_object->cap ) ) {
+		return current_user_can( 'publish_pages' );
+	}
+
+	if ( ! empty( $post_type_object->cap->create_posts ) ) {
+		$create_cap = $post_type_object->cap->create_posts;
+	} elseif ( ! empty( $post_type_object->cap->edit_posts ) ) {
+		$create_cap = $post_type_object->cap->edit_posts;
+	} else {
+		$create_cap = 'edit_pages';
+	}
+
+	$publish_cap = ! empty( $post_type_object->cap->publish_posts ) ? $post_type_object->cap->publish_posts : 'publish_pages';
+
+	return current_user_can( $create_cap ) && current_user_can( $publish_cap );
+}
+
 require_once POCHIPP_PATH . 'inc/ajax/auto_update.php';
 require_once POCHIPP_PATH . 'inc/ajax/search_amazon.php';
 require_once POCHIPP_PATH . 'inc/ajax/search_rakuten.php';
@@ -71,6 +95,15 @@ function update_data() {
  */
 add_action( 'wp_ajax_pochipp_registerd_by_block', '\POCHIPP\registerd_by_block' );
 function registerd_by_block() {
+
+	if ( ! \POCHIPP\can_create_pochipp_item() ) {
+		wp_die( json_encode( [
+			'error' => [
+				'code'    => 'forbidden',
+				'message' => 'この操作を実行する権限がありません。',
+			],
+		] ) );
+	}
 
 	if ( ! \POCHIPP\check_ajax_nonce() ) {
 		wp_die( json_encode( [
