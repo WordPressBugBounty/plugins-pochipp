@@ -13,13 +13,25 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 function get_creators_api_error_text( $code, $description = '' ) {
 	switch ( $code ) {
 		case 'InvalidClient':
+		case 'invalid_client':
 			$message = 'クライアントIDまたはクライアントシークレットが無効です。';
 			break;
 		case 'InvalidToken':
 		case 'ExpiredToken':
+		case 'invalid_token':
+		case 'expired_token':
 			$message = 'アクセストークンが無効または期限切れです。';
 			// トークンキャッシュをクリア
 			CreatorsApiClient::clear_token_cache();
+			break;
+		case 'invalid_scope':
+			$message = 'Creators APIのスコープ指定が無効です。';
+			break;
+		case 'invalid_request':
+			$message = 'Creators APIの認証リクエストが不正です。';
+			break;
+		case 'unauthorized_client':
+			$message = 'この認証情報ではCreators APIを利用できません。';
 			break;
 		case 'InvalidPartnerTag':
 			$message = 'パートナータグ（トラッキングID）が無効です。';
@@ -37,6 +49,9 @@ function get_creators_api_error_text( $code, $description = '' ) {
 		case 'InvalidParameterValue':
 		case 'MissingParameter':
 			$message = 'キーワードを入力してください。';
+			break;
+		case 'creators_api_auth_failed':
+			$message = 'Creators APIの認証に失敗しました。';
 			break;
 		default:
 			$message = $description ?: '不明なエラーが発生しました。';
