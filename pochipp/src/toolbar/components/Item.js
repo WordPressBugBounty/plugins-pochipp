@@ -44,9 +44,9 @@ const generateCvkey = () => {
 		.join('');
 };
 
-const generateShortcode = (type, pid, title, cvKeyTag, shop) => {
+const generateShortcode = (type, pid, title, cvKeyTag, shop, item) => {
 	const shortcode = shortcodes[type];
-	const shopLabel = shops[shop];
+	const shopLabel = label(shop, item);
 	switch (type) {
 		case 'button':
 			return `[${shortcode} id="${pid}" shop="${shop}"${cvKeyTag}]${shopLabel}[/${shortcode}]`;
@@ -99,7 +99,7 @@ export default ({
 										onChange(
 											insert(
 												value,
-												generateShortcode(selectedType, item.pid, item.title, cvKeyTag, shop),
+												generateShortcode(selectedType, item.pid, item.title, cvKeyTag, shop, item),
 												value.start,
 												value.end
 											)
