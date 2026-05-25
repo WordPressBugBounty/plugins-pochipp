@@ -145,9 +145,13 @@
 			&.__searchResultCheck {
 				margin: 12px 0 0;
 			}
+		}
+
+		.components-radio-control {
+			margin: 24px 0 0;
+			padding-right: 2px;
 
 			&.-radio {
-
 				.components-base-control__field {
 					display: flex;
 					flex-wrap: wrap;
@@ -159,7 +163,6 @@
 
 				.components-radio-control__option {
 					margin-right: 16px;
-					margin-bottom: 8px;
 				}
 			}
 		}

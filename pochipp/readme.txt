@@ -2,8 +2,8 @@
 Contributors: wppochipp
 Tags: affiliate, block
 Requires at least: 5.6
-Tested up to: 6.9
-Stable tag: 1.18.12
+Tested up to: 7.0
+Stable tag: 1.19.0
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -69,6 +69,10 @@ Terms: https://af.moshimo.com/af/www/terms/shop
 
 
 == Changelog ==
+
+= 1.19.0 =
+
+- WordPress 7.0対応
 
 = 1.18.12 =
 

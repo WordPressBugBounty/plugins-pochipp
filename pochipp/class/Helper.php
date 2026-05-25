@@ -183,7 +183,7 @@ trait Helper {
 			$query = '?a_id=' . $a_id . '&p_id=54&pc_id=54&pl_id=616';
 		} elseif ( 'yahoo' === $shop_type ) {
 			$a_id  = $a_id ?: \POCHIPP::get_setting( 'moshimo_yahoo_aid' );
-			$query = '?a_id=' . $a_id . '&p_id=1225&pc_id=1925&pl_id=18502';
+			$query = '?a_id=' . $a_id . '&p_id=1225&pc_id=1925&pl_id=19142';
 		} else {
 			return $url;
 		}
@@ -224,7 +224,7 @@ trait Helper {
 	public static function get_yahoo_imptag( $yahoo_aid = '' ) {
 
 		if ( $yahoo_aid ) {
-			return '<img src="https://i.moshimo.com/af/i/impression?a_id=' . $yahoo_aid . '&p_id=1225&pc_id=1925&pl_id=18502" width="1" height="1" style="border:none;">';
+			return '<img src="https://i.moshimo.com/af/i/impression?a_id=' . $yahoo_aid . '&p_id=1225&pc_id=1925&pl_id=19142" width="1" height="1" style="border:none;">';
 		}
 
 		// '<img src="https://ad.jp.ap.valuecommerce.com/servlet/gifbanner?sid='.$sid.'&pid='.$pid.'" width="1" height="1" border="0">';
