@@ -290,15 +290,15 @@ trait Helper {
 			$query_args['s'] = $keywords;
 		}
 
-		// 商品カテゴリ
-		if ( 0 < intval( $term_id ) ) {
-			$query_args['tax_query'] = [
-				[
-					'taxonomy'  => \POCHIPP::TAXONOMY_SLUG,
-					'terms'     => $term_id,
-				],
-			];
-		}
+			// 商品カテゴリ
+			if ( 0 < intval( $term_id ) ) {
+				$query_args['tax_query'] = [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- Required for filtering registered items by taxonomy.
+					[
+						'taxonomy'  => \POCHIPP::TAXONOMY_SLUG,
+						'terms'     => $term_id,
+					],
+				];
+			}
 
 		// 並び順
 		if ( 'old' === $sort ) {
@@ -306,10 +306,10 @@ trait Helper {
 			$query_args['orderby'] = 'date';
 		} elseif ( 'count' === $sort ) {
 
-			$query_args['order']    = 'DESC';
-			$query_args['orderby']  = 'meta_value_num';
-			$query_args['meta_key'] = 'used_count';
-		}
+				$query_args['order']    = 'DESC';
+				$query_args['orderby']  = 'meta_value_num';
+				$query_args['meta_key'] = 'used_count'; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Required for sorting registered items by use count.
+			}
 
 		// 最終的に返すデータ
 		$datas = [];

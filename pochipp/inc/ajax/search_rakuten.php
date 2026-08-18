@@ -98,7 +98,7 @@ function get_data_from_rakuten_api( $api_query, $keywords = '' ) {
 	$rakuten_access_key = trim( (string) \POCHIPP::get_setting( 'rakuten_access_key' ) );
 
 	if ( $rakuten_access_key ) {
-		$request_url  = 'https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20220601';
+		$request_url  = 'https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20260701';
 		$request_url .= '?applicationId=' . $rakuten_app_id; // アプリID情報
 		$request_url .= '&accessKey=' . rawurlencode( $rakuten_access_key ); // アクセスキー
 	} else {
@@ -117,9 +117,9 @@ function get_data_from_rakuten_api( $api_query, $keywords = '' ) {
 	];
 
 	if ( $rakuten_access_key ) {
-		$home_url    = home_url( '/' );
-		$home_port   = wp_parse_url( $home_url, PHP_URL_PORT );
-		$origin_header = wp_parse_url( $home_url, PHP_URL_SCHEME ) . '://' . wp_parse_url( $home_url, PHP_URL_HOST ) . ( $home_port ? ':' . $home_port : '' );
+		$home_url                = home_url( '/' );
+		$home_port               = wp_parse_url( $home_url, PHP_URL_PORT );
+		$origin_header           = wp_parse_url( $home_url, PHP_URL_SCHEME ) . '://' . wp_parse_url( $home_url, PHP_URL_HOST ) . ( $home_port ? ':' . $home_port : '' );
 		$request_args['headers'] = [
 			'Origin' => $origin_header,
 		];

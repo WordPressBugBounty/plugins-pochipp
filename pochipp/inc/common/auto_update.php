@@ -17,7 +17,7 @@ function update_item_data( $pid ) {
 
 	if ( isset( $datas['error'] ) ) {
 		$add_data = [];
-		if ( $datas['error']['code'] === 'InvalidParameterValue' || $datas['error']['code'] === 'no_item' || $datas['error']['code'] === 404 ) {
+			if ( 'InvalidParameterValue' === $datas['error']['code'] || 'no_item' === $datas['error']['code'] || 404 === $datas['error']['code'] ) {
 			$add_data['link_broken'] = true;
 		}
 

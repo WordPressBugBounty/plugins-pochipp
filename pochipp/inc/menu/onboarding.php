@@ -90,13 +90,13 @@
 		const displayContent = element.closest(contentSelector);
 
 		const nextStep = parseInt(displayContent.getAttribute('data-step'), 10) + 1;
-		  const nextDisplayContent = document.querySelector(`${contentSelector}[data-step="${nextStep}"]`);
-		  if (nextDisplayContent === null) {
-			  document.querySelector('#onboarding').remove();
-			  return;
-		}
+			const nextDisplayContent = document.querySelector(`${contentSelector}[data-step="${nextStep}"]`);
+			if (nextDisplayContent === null) {
+				document.querySelector('#onboarding').remove();
+				return;
+			}
 
-		  displayContent.style.display = 'none';
-		  nextDisplayContent.style.display = 'flex';
+			displayContent.style.display = 'none';
+			nextDisplayContent.style.display = 'flex';
 	}));
 </script>

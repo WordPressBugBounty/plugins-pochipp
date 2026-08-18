@@ -131,9 +131,9 @@ class CreatorsApiClient {
 	 * APIを実行
 	 *
 	 * @param string $path APIパス
-	 * @param array $request_body リクエストボディ
+	 * @param array  $request_body リクエストボディ
 	 * @param string $operation 操作タイプ
-	 * @param bool $retry_on_token_error トークンエラー時に再試行するか
+	 * @param bool   $retry_on_token_error トークンエラー時に再試行するか
 	 * @return array レスポンスデータまたはエラー配列
 	 */
 	private function request_api( $path, $request_body, $operation, $retry_on_token_error = true ) {
@@ -152,7 +152,7 @@ class CreatorsApiClient {
 					'Content-Type'  => 'application/json',
 					'x-marketplace' => 'www.amazon.co.jp',
 				],
-				'body' => wp_json_encode( $request_body ),
+				'body'    => wp_json_encode( $request_body ),
 			]
 		);
 
@@ -170,7 +170,7 @@ class CreatorsApiClient {
 	 * APIレスポンスを処理
 	 *
 	 * @param array|WP_Error $response wp_remote_postのレスポンス
-	 * @param string $operation 操作タイプ ('searchItems' or 'getItems')
+	 * @param string         $operation 操作タイプ ('searchItems' or 'getItems')
 	 * @return array レスポンスデータまたはエラー配列
 	 */
 	private function handle_response( $response, $operation ) {
@@ -184,7 +184,7 @@ class CreatorsApiClient {
 		}
 
 		$status_code = (int) wp_remote_retrieve_response_code( $response );
-		$body = json_decode( wp_remote_retrieve_body( $response ), true );
+		$body        = json_decode( wp_remote_retrieve_body( $response ), true );
 
 		if ( ! $body || ! is_array( $body ) ) {
 			if ( 400 <= $status_code ) {
@@ -257,7 +257,7 @@ class CreatorsApiClient {
 				'headers' => [
 					'Content-Type' => 'application/json',
 				],
-				'body' => wp_json_encode(
+				'body'    => wp_json_encode(
 					[
 						'grant_type'    => 'client_credentials',
 						'client_id'     => $this->client_id,
@@ -277,7 +277,8 @@ class CreatorsApiClient {
 	 * @return array 正規化済みトークン、またはエラー配列
 	 */
 	private function request_access_token_v23() {
-		$credentials = base64_encode( $this->client_id . ':' . $this->client_secret );
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Required for Basic authentication credentials.
+			$credentials = base64_encode( $this->client_id . ':' . $this->client_secret );
 
 		$response = wp_remote_post(
 			self::AUTH_ENDPOINT_V23,
@@ -287,7 +288,7 @@ class CreatorsApiClient {
 					'Authorization' => 'Basic ' . $credentials,
 					'Content-Type'  => 'application/x-www-form-urlencoded',
 				],
-				'body' => 'grant_type=client_credentials&scope=creatorsapi/default',
+				'body'    => 'grant_type=client_credentials&scope=creatorsapi/default',
 			]
 		);
 
@@ -298,7 +299,7 @@ class CreatorsApiClient {
 	 * トークンレスポンスを正規化
 	 *
 	 * @param array|\WP_Error $response wp_remote_postのレスポンス
-	 * @param string $auth_flow 認証フロー名
+	 * @param string          $auth_flow 認証フロー名
 	 * @return array 正規化済みトークン、またはエラー配列
 	 */
 	private function normalize_token_response( $response, $auth_flow ) {

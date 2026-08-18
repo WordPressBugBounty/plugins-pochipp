@@ -381,7 +381,7 @@ function get_amazon_api_error_text( $code, $description ) {
 /**
  * Creators APIレスポンスを整形
  *
- * @param array $result_data APIレスポンスの結果データ
+ * @param array  $result_data APIレスポンスの結果データ
  * @param string $keywords 検索キーワード（キーワード検索時のみ）
  * @return array 整形された商品データ
  */

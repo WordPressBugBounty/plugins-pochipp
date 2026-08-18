@@ -20,8 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 <?php
 // PA-API設定値をhiddenで保持（UI非表示）
-\POCHIPP::output_hidden(['key' => 'amazon_access_key']);
-\POCHIPP::output_hidden(['key' => 'amazon_secret_key']);
+\POCHIPP::output_hidden( ['key' => 'amazon_access_key' ] );
+\POCHIPP::output_hidden( ['key' => 'amazon_secret_key' ] );
 ?>
 
 <h3 class="pchpp-setting__h3">Creators API設定</h3>

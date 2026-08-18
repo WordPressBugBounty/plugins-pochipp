@@ -110,14 +110,13 @@ trait Setting {
 		<div class="pchpp-setting__field -radio <?php echo esc_attr( $class ); ?>">
 			<?php
 				foreach ( $choices as $value => $label ) :
-				$radio_id = $key . '_' . $value;
-				$checked  = checked( $val, $value, false );
-			?>
-					<label for="<?php echo esc_attr( $radio_id ); ?>">
-						<input type="radio" id="<?php echo esc_attr( $radio_id ); ?>" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>" <?php echo $checked; ?> >
-						<span><?php echo wp_kses_post( $label ); ?></span>
-					</label>
-			<?php endforeach; ?>
+					$radio_id = $key . '_' . $value;
+				?>
+						<label for="<?php echo esc_attr( $radio_id ); ?>">
+							<input type="radio" id="<?php echo esc_attr( $radio_id ); ?>" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>" <?php checked( $val, $value ); ?> >
+							<span><?php echo wp_kses_post( $label ); ?></span>
+						</label>
+				<?php endforeach; ?>
 		</div>
 		<?php
 	}
@@ -134,15 +133,13 @@ trait Setting {
 		$name = \POCHIPP::DB_NAME . '[' . $key . ']';
 		$val  = \POCHIPP::get_setting( $key );
 
-		$checked = checked( (string) $val, '1', false );
-
-		?>
-		<div class="pchpp-setting__field -checkbox">
-			<input type="hidden" name="<?php echo esc_attr( $name ); ?>" value="">
-			<input type="checkbox" id="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $name ); ?>" value="1" <?php echo $checked; ?> />
-			<label for="<?php echo esc_attr( $key ); ?>"><?php echo wp_kses_post( $label ); ?></label>
-		</div>
-		<?php
+			?>
+			<div class="pchpp-setting__field -checkbox">
+				<input type="hidden" name="<?php echo esc_attr( $name ); ?>" value="">
+				<input type="checkbox" id="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $name ); ?>" value="1" <?php checked( (string) $val, '1' ); ?> />
+				<label for="<?php echo esc_attr( $key ); ?>"><?php echo wp_kses_post( $label ); ?></label>
+			</div>
+			<?php
 	}
 
 
@@ -156,15 +153,13 @@ trait Setting {
 		$id        = $args['id'] ?? '';
 		$image_url = $args['image_url'] ?? '';
 
-		$name      = \POCHIPP::DB_NAME . '[' . $key . ']' . '[' . $id . ']';
-		$array_val = \POCHIPP::get_setting( $key );
-		$val       = $array_val !== '' ? $array_val[ $id ] ?? '' : '';
-
-		$checked = checked( (string) $val, '1', false );
+			$name      = \POCHIPP::DB_NAME . '[' . $key . '][' . $id . ']';
+			$array_val = \POCHIPP::get_setting( $key );
+			$val       = '' !== $array_val ? $array_val[ $id ] ?? '' : '';
 
 		?>
 			<div class="pchpp-setting__field -checkbox">
-				<input type="checkbox" id="<?php echo esc_attr( $name ); ?>" name="<?php echo esc_attr( $name ); ?>" value="1" <?php echo $checked; ?> />
+					<input type="checkbox" id="<?php echo esc_attr( $name ); ?>" name="<?php echo esc_attr( $name ); ?>" value="1" <?php checked( (string) $val, '1' ); ?> />
 				<?php if ( $image_url ) : ?>
 					<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $label ); ?>">
 				<?php endif; ?>

@@ -55,8 +55,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 					</div>
 					<!-- <br> -->
 					<!-- <p class="pchpp-setting__desc">
-					  <code>Y/m/d G:i</code>の形式で入力してください。 例 : <code>2020/01/05 10:00</code>, <code>2020/11/25 20:00</code>
-				  </p> -->
+							<code>Y/m/d G:i</code>の形式で入力してください。 例 : <code>2020/01/05 10:00</code>, <code>2020/11/25 20:00</code>
+						</p> -->
 				</dd>
 			</dl>
 	<?php endif; ?>
@@ -110,8 +110,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 						?>
 					</div>
 					<!-- <p class="pchpp-setting__desc">
-					  <code>Y/m/d G:i</code>の形式で入力してください。 例 : <code>2020/01/05 10:00</code>, <code>2020/11/25 20:00</code>
-				  </p> -->
+							<code>Y/m/d G:i</code>の形式で入力してください。 例 : <code>2020/01/05 10:00</code>, <code>2020/11/25 20:00</code>
+						</p> -->
 				</dd>
 			</dl>
 	<?php endif; ?>
@@ -187,8 +187,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 						?>
 					</div>
 					<!-- <p class="pchpp-setting__desc">
-					  <code>Y/m/d G:i</code>の形式で入力してください。 例 : <code>2020/01/05 10:00</code>, <code>2020/11/25 20:00</code>
-				  </p> -->
+							<code>Y/m/d G:i</code>の形式で入力してください。 例 : <code>2020/01/05 10:00</code>, <code>2020/11/25 20:00</code>
+						</p> -->
 				</dd>
 			</dl>
 	<?php endif; ?>
@@ -295,7 +295,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 <h3 class="pchpp-setting__h3">カスタムボタンセール情報</h3>
 <div class="pchpp-setting__div">
 	<p>
-		カスタムボタンのセール情報は「<a href="<?php echo admin_url( 'edit.php?post_type=pochipps' ); ?>">ポチップ管理</a>」より、各商品ごとに設定を行えます。
+			カスタムボタンのセール情報は「<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=pochipps' ) ); ?>">ポチップ管理</a>」より、各商品ごとに設定を行えます。
 	</p>
 </div>
 

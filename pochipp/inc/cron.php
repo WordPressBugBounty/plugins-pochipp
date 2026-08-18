@@ -25,7 +25,7 @@ function run_auto_update_cron() {
 	if ( get_transient( AUTO_UPDATE_LOCK_TRANSIENT ) ) return;
 	set_transient( AUTO_UPDATE_LOCK_TRANSIENT, 1, 2 * MINUTE_IN_SECONDS );
 
-	$scan_size   = 50;
+	$scan_size = 50;
 
 	$last_id = (int) get_option( AUTO_UPDATE_LAST_ID_OPTION, 0 );
 	$ids     = get_update_target_ids_after( $last_id, $scan_size );
@@ -35,7 +35,7 @@ function run_auto_update_cron() {
 		return;
 	}
 
-	$updated_count = 0;
+	$updated_count     = 0;
 	$last_processed_id = 0;
 	foreach ( $ids as $pid ) {
 		$update_result = update_item_data( $pid );

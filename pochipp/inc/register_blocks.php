@@ -542,7 +542,7 @@ function render_pochipp_btns( $btn_data = [], $is_preview = false ) {
 			</div>
 		<?php endif; ?>
 		<?php if ( $mercari_url ) : ?>
-		  <div class="pochipp-box__btnwrap -mercari<?php if ($mercari_sale_text) echo ' -on-sale'; ?>">
+				<div class="pochipp-box__btnwrap -mercari<?php if ( $mercari_sale_text ) echo ' -on-sale'; ?>">
 				<?php if ( $mercari_sale_text ) : ?>
 					<div class="pochipp-box__saleInfo -top">＼<?php echo esc_html( $mercari_sale_text ); ?>／</div>
 				<?php endif; ?>
@@ -552,7 +552,7 @@ function render_pochipp_btns( $btn_data = [], $is_preview = false ) {
 					</span>
 				<?php // echo \POCHIPP::get_mercari_imptag( $mercari_aid ); ?>
 				</a>
-		  </div>
+				</div>
 		<?php endif; ?>
 		<?php if ( $custom_btn_url && $custom_btn_text ) : ?>
 			<?php
