@@ -1,5 +1,5 @@
 {
-    "apiVersion": 2,
+    "apiVersion": 3,
     "name": "pochipp/setting-preview",
     "title": "Setting Preview",
     "supports": {
@@ -11,5 +11,6 @@
             "default": ""
         }
     },
-    "editorScript": "file:../../../dist/blocks/setting-preview/index.js"
+    "editorScript": "file:../../../dist/blocks/setting-preview/index.js",
+    "editorStyle": "file:../../../dist/css/blocks.css"
 }

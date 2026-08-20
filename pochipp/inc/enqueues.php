@@ -28,10 +28,11 @@ function admin_scripts( $hook_suffix ) {
 
 	global $post_type;
 
-	$is_pochipp_menu = false !== strpos( $hook_suffix, 'pochipp' );
-	$is_editor_page  = 'post.php' === $hook_suffix || 'post-new.php' === $hook_suffix;
-	$is_pattern_page = 'site-editor.php' === $hook_suffix;
-	$is_columns_page = 'edit.php' === $hook_suffix && \POCHIPP::POST_TYPE_SLUG === $post_type;
+	$is_pochipp_menu        = false !== strpos( $hook_suffix, 'pochipp' );
+	$is_editor_page         = 'post.php' === $hook_suffix || 'post-new.php' === $hook_suffix;
+	$is_pattern_page        = 'site-editor.php' === $hook_suffix;
+	$is_columns_page        = 'edit.php' === $hook_suffix && \POCHIPP::POST_TYPE_SLUG === $post_type;
+	$is_pochipp_editor_page = $is_editor_page && \POCHIPP::POST_TYPE_SLUG === $post_type;
 
 	// 編集画面 or 設定ページでのみ読み込む
 	if ( $is_editor_page || $is_pochipp_menu || $is_pattern_page ) {
@@ -49,6 +50,10 @@ function admin_scripts( $hook_suffix ) {
 	if ( $is_pochipp_menu || $is_columns_page ) {
 		wp_enqueue_style( 'pochipp-setting', POCHIPP_URL . 'dist/css/setting.css', [], \POCHIPP::$version );
 		wp_enqueue_script( 'pochipp-setting', POCHIPP_URL . 'dist/js/setting.js', [ 'jquery' ], \POCHIPP::$version, true );
+	}
+
+	if ( $is_pochipp_editor_page ) {
+		wp_enqueue_style( 'pochipp-setting-shell', POCHIPP_URL . 'dist/css/setting-shell.css', [], \POCHIPP::$version );
 	}
 
 	// 設定ページにだけ読み込むファイル
@@ -81,16 +86,11 @@ function block_assets() {
 	wp_enqueue_style( 'pochipp-toolbar', POCHIPP_URL . '/dist/css/toolbar.css', [], \POCHIPP::$version );
 	wp_enqueue_script( 'pochipp-toolbar', POCHIPP_URL . '/dist/blocks/toolbar/index.js', [], \POCHIPP::$version, true );
 
-	// ブロック関係のCSS
-	wp_enqueue_style( 'pochipp-blocks', POCHIPP_URL . 'dist/css/blocks.css', [], \POCHIPP::$version );
-
-	global $post_type;
-	if ( \POCHIPP::POST_TYPE_SLUG === $post_type ) {
-		wp_enqueue_style( 'pochipp-setting', POCHIPP_URL . 'dist/css/setting.css', [], \POCHIPP::$version );
-	}
-
-	// カスタムスタイルをインラインで追加（site-editor対応）
-	if ( 'site-editor' === get_current_screen()->base ) {
-		wp_add_inline_style( 'pochipp-blocks', \POCHIPP\get_custom_style() );
+	foreach ( [
+		'pochipp-linkbox-editor-style',
+		'pochipp-setting-editor-style',
+		'pochipp-setting-preview-editor-style',
+	] as $style_handle ) {
+		wp_add_inline_style( $style_handle, \POCHIPP\get_custom_style() );
 	}
 }

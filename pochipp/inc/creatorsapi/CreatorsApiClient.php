@@ -16,7 +16,7 @@ class CreatorsApiClient {
 	const TOKEN_TRANSIENT_KEY = 'pochipp_creators_api_token';
 
 	// APIエンドポイント
-	const AUTH_ENDPOINT_V33 = 'https://api.amazon.com/auth/o2/token';
+	const AUTH_ENDPOINT_V33 = 'https://api.amazon.co.jp/auth/o2/token';
 	const AUTH_ENDPOINT_V23 = 'https://creatorsapi.auth.us-west-2.amazoncognito.com/oauth2/token';
 	const API_BASE_URL      = 'https://creatorsapi.amazon/catalog/v1';
 
@@ -35,13 +35,17 @@ class CreatorsApiClient {
 	 * @return string|array トークン文字列、またはエラー配列
 	 */
 	public function get_access_token() {
+		$cached_token = $this->get_cached_access_token();
+		if ( null !== $cached_token ) {
+			return $this->format_access_token( $cached_token );
+		}
+
 		$attempts = [];
 		$token    = $this->request_access_token_v33();
 
 		if ( isset( $token['error'] ) ) {
 			$attempts['v3.3'] = $token['error'];
 			$token            = $this->request_access_token_v23();
-			$token            = $token;
 		}
 
 		if ( isset( $token['error'] ) ) {
@@ -57,10 +61,7 @@ class CreatorsApiClient {
 
 		$this->cache_access_token( $token );
 
-		if ( 'v2.3' === $token['auth_flow'] ) {
-			return $token['access_token'] . ', Version 2.3';
-		}
-		return $token['access_token'];
+		return $this->format_access_token( $token );
 	}
 
 	/**
@@ -369,12 +370,62 @@ class CreatorsApiClient {
 		set_transient(
 			self::TOKEN_TRANSIENT_KEY,
 			[
-				'access_token' => $token_data['access_token'],
-				'auth_flow'    => $token_data['auth_flow'],
-				'expires_in'   => $expires_in,
+				'access_token'            => $token_data['access_token'],
+				'auth_flow'               => $token_data['auth_flow'],
+				'expires_in'              => $expires_in,
+				'credentials_fingerprint' => $this->get_credentials_fingerprint(),
 			],
 			$cache_duration
 		);
+	}
+
+	/**
+	 * キャッシュ済みトークンを取得
+	 *
+	 * @return array|null キャッシュ済みトークン、またはキャッシュなし
+	 */
+	private function get_cached_access_token() {
+		$token_data = get_transient( self::TOKEN_TRANSIENT_KEY );
+
+		if ( false === $token_data ) {
+			return null;
+		}
+
+		if (
+			! is_array( $token_data ) ||
+			empty( $token_data['access_token'] ) ||
+			empty( $token_data['auth_flow'] ) ||
+			empty( $token_data['credentials_fingerprint'] ) ||
+			! hash_equals( $this->get_credentials_fingerprint(), $token_data['credentials_fingerprint'] )
+		) {
+			self::clear_token_cache();
+			return null;
+		}
+
+		return $token_data;
+	}
+
+	/**
+	 * APIリクエスト用のアクセストークン形式に変換
+	 *
+	 * @param array $token_data トークンデータ
+	 * @return string Authorizationヘッダーへ設定するトークン
+	 */
+	private function format_access_token( $token_data ) {
+		if ( 'v2.3' === $token_data['auth_flow'] ) {
+			return $token_data['access_token'] . ', Version 2.3';
+		}
+
+		return $token_data['access_token'];
+	}
+
+	/**
+	 * 認証情報のフィンガープリントを生成
+	 *
+	 * @return string 認証情報のフィンガープリント
+	 */
+	private function get_credentials_fingerprint() {
+		return hash( 'sha256', $this->client_id . "\0" . $this->client_secret );
 	}
 
 	/**

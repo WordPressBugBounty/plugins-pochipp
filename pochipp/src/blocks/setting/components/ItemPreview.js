@@ -43,6 +43,7 @@ export default memo(({ postId, postTitle, customImgUrl, parsedMeta }) => {
 
 	// ポチップ設定データ
 	const pchppVars = window.pchppVars || {};
+	const reviewIconUrl = pchppVars.pluginUrl ? `${pchppVars.pluginUrl}assets/img/review.svg` : '';
 
 	let dataBtnStyle = pchppVars.btnStyle || 'dflt';
 	if ('default' === dataBtnStyle) dataBtnStyle = 'dflt';
@@ -79,7 +80,7 @@ export default memo(({ postId, postTitle, customImgUrl, parsedMeta }) => {
 					)}
 					{dispReviewLink && (
 						<div className='pochipp-box__review'>
-							<span className='dashicons dashicons-format-chat'></span>
+							{reviewIconUrl && <img src={reviewIconUrl} alt='' width='16' height='16' />}
 							<span>口コミを見る</span>
 						</div>
 					)}

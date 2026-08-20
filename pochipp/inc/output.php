@@ -99,8 +99,10 @@ add_action( 'admin_head', function() {
 	// for Ajax
 	$script  = 'window.pchppVars = {};';
 	$script .= 'window.pchppVars.adminUrl = "' . esc_js( admin_url() ) . '";';
+	$script .= 'window.pchppVars.pluginUrl = "' . esc_js( POCHIPP_URL ) . '";';
 	$script .= 'window.pchppVars.ajaxUrl = "' . esc_js( admin_url( 'admin-ajax.php' ) ) . '";';
 	$script .= 'window.pchppVars.ajaxNonce = "' . esc_js( wp_create_nonce( \POCHIPP::NONCE_KEY ) ) . '";';
+	$script .= 'window.pchppVars.blockApiVersion = "' . esc_js( \POCHIPP\get_block_api_version() ) . '";';
 
 	// for Block
 	$script .= 'window.pchppVars.btnStyle = "' . esc_js( \POCHIPP::get_setting( 'btn_style' ) ) . '";';

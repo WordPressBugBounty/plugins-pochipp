@@ -1,5 +1,5 @@
 {
-    "apiVersion": 2,
+    "apiVersion": 3,
     "name": "pochipp/linkbox",
     "title": "Pochipp",
     "category": "design",
@@ -135,5 +135,6 @@
             "default": ""
         }
     },
-    "editorScript": "file:../../../dist/blocks/linkbox/index.js"
+    "editorScript": "file:../../../dist/blocks/linkbox/index.js",
+    "editorStyle": "file:../../../dist/css/blocks.css"
 }

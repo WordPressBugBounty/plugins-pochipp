@@ -18,12 +18,14 @@ import TabList from './components/TabList';
 import { SearchBtn, UpdateBtn, SimpleLinkBtn } from './components/settingBtns';
 import BtnSettingTable from '@blocks/components/BtnSettingTable';
 import { getParsedMeta, setCustomFieldArea, sendUpdateAjax } from '@blocks/helper';
+import { getPochippBlockApiVersion, openPochippThickbox } from '@blocks/helper/editorEnvironment';
 
 /**
  * metadata
  */
 const blockName = 'pochipp-block';
 const { apiVersion, name, category, keywords, supports } = metadata;
+const resolvedApiVersion = getPochippBlockApiVersion(apiVersion);
 const linkType = {
 	shop: 'shop', // amazon or rakuten or yahoo
 	simple: 'simple',
@@ -107,26 +109,25 @@ window.setItemMetaData = (itemData, isMerge) => {
 };
 
 // 商品データ更新処理
-const updateItem = (itemCode, searchedAt) => {
+const updateItem = (itemCode, searchedAt, { onStart, onDone }) => {
 	const params = new URLSearchParams();
 	params.append('action', 'pochipp_update_data');
 	params.append('itemcode', itemCode);
 	params.append('searched_at', searchedAt);
 
-	const btns = document.querySelector('.pochipp-block--setting .__btns');
-	btns.classList.add('-updating');
+	onStart();
 
 	const doneFunc = (response) => {
 		const itemData = response.data;
 		window.setItemMetaData(itemData, true);
 
 		alert('更新が完了しました！');
-		btns.classList.remove('-updating');
+		onDone();
 	};
 	const failFunc = (err) => {
 		alert('更新に失敗しました。');
 		console.error(err);
-		btns.classList.remove('-updating');
+		onDone();
 	};
 
 	// ajax処理
@@ -137,7 +138,7 @@ const updateItem = (itemCode, searchedAt) => {
  * ポチップ登録用のブロック
  */
 registerBlockType(name, {
-	apiVersion,
+	apiVersion: resolvedApiVersion,
 	title: '商品データ',
 	icon: 'pets',
 	category,
@@ -164,6 +165,7 @@ registerBlockType(name, {
 		// console.log(meta, parsedMeta);
 
 		const [isStickey, setIsStickey] = useState(false);
+		const [isUpdating, setIsUpdating] = useState(false);
 		const [selectedLinkType, setSelectedLinkType] = useState(searchedAt === shops.simple ? linkType.simple : linkType.shop);
 		const [selectedTab, setSelectedTab] = useState(tabs.basic.key);
 
@@ -223,15 +225,7 @@ registerBlockType(name, {
 				}
 				url += '&TB_iframe=true'; //これは最後に。
 
-				// #TB_window を開く
-				window.tb_show('商品検索', url);
-
-				// 開いた #TB_window を取得してクラス追加
-				const tbWindow = document.querySelector('#TB_window');
-
-				if (tbWindow) {
-					tbWindow.classList.add('by-pochipp');
-				}
+				openPochippThickbox('商品検索', url);
 			},
 			[postId, clientId]
 		);
@@ -284,7 +278,14 @@ registerBlockType(name, {
 		const { itemCode, showUpdateBtn } = itemInfoForUpdate[searchedAt] || itemInfoForUpdate.default;
 
 		// 商品データ更新処理
-		const updateItemData = useCallback(() => updateItem(itemCode, searchedAt), [itemCode, searchedAt]);
+		const updateItemData = useCallback(
+			() =>
+				updateItem(itemCode, searchedAt, {
+					onStart: () => setIsUpdating(true),
+					onDone: () => setIsUpdating(false),
+				}),
+			[itemCode, searchedAt]
+		);
 
 		return (
 			<>
@@ -296,7 +297,7 @@ registerBlockType(name, {
 				>
 					<ItemPreview {...{ postId, postTitle, customImgUrl, parsedMeta }} />
 					<div className='__settings'>
-						<div className='__btns'>
+						<div className={isUpdating ? '__btns -updating' : '__btns'}>
 							{showSearchBtn && (
 								<>
 									<SearchBtn

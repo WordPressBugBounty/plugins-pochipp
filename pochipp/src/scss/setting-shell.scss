@@ -1,0 +1,24 @@
+/**
+ * Pochippの商品データ編集画面で親documentに効かせるCSS
+ */
+.post-type-pochipps {
+
+	.interface-interface-skeleton__content > .edit-post-visual-editor > .editor-styles-wrapper {
+		background: #e8e8e8;
+	}
+
+	.edit-post-visual-editor__post-title-wrapper {
+		display: block;
+		height: 1px;
+		visibility: hidden;
+		pointer-events: none;
+
+		div {
+			margin: 0 !important;
+		}
+	}
+
+	.block-editor-block-contextual-toolbar-wrapper {
+		display: none;
+	}
+}

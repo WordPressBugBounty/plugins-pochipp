@@ -1,5 +1,5 @@
 {
-    "apiVersion": 2,
+    "apiVersion": 3,
     "name": "pochipp/setting",
     "title": "Setting",
     "category": "design",
@@ -24,5 +24,6 @@
             "default": ""
         }
     },
-    "editorScript": "file:../../../dist/blocks/setting/index.js"
+    "editorScript": "file:../../../dist/blocks/setting/index.js",
+    "editorStyle": "file:../../../dist/css/blocks.css"
 }

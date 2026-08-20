@@ -16,6 +16,7 @@ import { Icon, search, upload, edit } from '@wordpress/icons';
 import metadata from './block.json';
 import iconReSearch from './icon_re_search.js';
 import { sendUpdateAjax } from '@blocks/helper';
+import { getPochippBlockApiVersion, getPochippVars, openPochippThickbox } from '@blocks/helper/editorEnvironment';
 import BtnSettingTable from '@blocks/components/BtnSettingTable';
 import ExPanel from './components/ExPanel.js';
 
@@ -24,6 +25,7 @@ import ExPanel from './components/ExPanel.js';
  */
 const blockName = 'pochipp-block';
 const { apiVersion, name, category, keywords, supports } = metadata;
+const resolvedApiVersion = getPochippBlockApiVersion(apiVersion);
 
 /* eslint no-alert: 0 */
 /* eslint no-console: 0 */
@@ -89,7 +91,7 @@ const btnLayoutsSP = [
  * ポチップ登録用のブロック
  */
 registerBlockType(name, {
-	apiVersion,
+	apiVersion: resolvedApiVersion,
 	title: 'ポチップ',
 	icon: 'pets',
 	category,
@@ -104,7 +106,7 @@ registerBlockType(name, {
 		const { pid, title, info, isCount, cvKey } = attributes;
 
 		// ポチップ設定データ
-		const pchppVars = window.pchppVars || {};
+		const pchppVars = getPochippVars();
 
 		// 投稿IDを取得
 		const postId = useSelect((select) => select('core/editor').getCurrentPostId(), []);
@@ -157,12 +159,7 @@ registerBlockType(name, {
 				}
 				url += '&TB_iframe=true'; // これは最後に。
 
-				window.tb_show('商品検索', url);
-
-				const tbWindow = document.querySelector('#TB_window');
-				if (tbWindow) {
-					tbWindow.classList.add('by-pochipp');
-				}
+				openPochippThickbox('商品検索', url);
 			},
 			[postId, clientId]
 		);
@@ -225,7 +222,7 @@ registerBlockType(name, {
 		// memo: <RichText allowedFormats={[]} />
 
 		// pochipp編集ページ
-		const adminUrl = window.pchppVars.adminUrl || '';
+		const adminUrl = pchppVars.adminUrl || '';
 		const itemEditUrl = pid ? `${adminUrl}/post.php?post=${pid}&action=edit` : '';
 
 		let branchContent = null;

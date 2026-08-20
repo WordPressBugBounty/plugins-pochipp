@@ -2,6 +2,8 @@
 /* eslint no-alert: 0 */
 /* eslint no-console: 0 */
 
+import { getAdminDocument, getPochippVars } from './editorEnvironment';
+
 /**
  * JSONのパース
  *
@@ -20,8 +22,8 @@ export const getParsedMeta = (data) => {
 /**
  * エディター下の「カスタムフィールド」の値を強制的にセットする処理
  */
-export const setCustomFieldArea = (metaKey, metaVal) => {
-	const customField = document.querySelector('#postcustomstuff');
+export const setCustomFieldArea = (metaKey, metaVal, targetDocument = getAdminDocument()) => {
+	const customField = targetDocument.querySelector('#postcustomstuff');
 	if (null === customField) return;
 
 	const keyInput = customField.querySelector(`input[value="${metaKey}"]`);
@@ -40,10 +42,11 @@ export const setCustomFieldArea = (metaKey, metaVal) => {
  * ajax実行処理
  */
 export const sendUpdateAjax = async (params, doneFunc, failFunc) => {
-	if (window.pchppVars === undefined) return;
+	const pchppVars = getPochippVars();
+	if (!pchppVars.ajaxUrl) return;
 
-	const ajaxUrl = window.pchppVars.ajaxUrl;
-	const ajaxNonce = window.pchppVars.ajaxNonce;
+	const ajaxUrl = pchppVars.ajaxUrl;
+	const ajaxNonce = pchppVars.ajaxNonce;
 
 	// nonce 追加
 	params.append('nonce', ajaxNonce);
