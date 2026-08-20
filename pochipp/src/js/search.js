@@ -2,6 +2,31 @@
  * thickboxで呼び出される iframe の中で読み込むスクリプト
  */
 
+const THICKBOX_ITEM_SELECTED_MESSAGE = 'pochipp:thickbox-item-selected';
+
+/**
+ * 選択した商品データをThickBoxの呼び出し元へ送信
+ *
+ * @param {Object}  itemData 商品データ
+ * @param {string}  blockId  ブロックID
+ * @param {string}  calledAt 呼び出し元
+ * @param {boolean} isMerge  データをマージして更新するかどうか
+ */
+const postSelectedItem = (itemData, blockId, calledAt, isMerge) => {
+	window.parent.postMessage(
+		{
+			type: THICKBOX_ITEM_SELECTED_MESSAGE,
+			payload: {
+				itemData,
+				blockId,
+				calledAt,
+				isMerge,
+			},
+		},
+		window.location.origin
+	);
+};
+
 /**
  * 検索結果の商品リストをHTMLとして取得
  *
@@ -204,18 +229,10 @@ const getResultHtml = (searchedItems, registerdItems, calledAt) => {
 							onlyData.seller_id = itemData.seller_id || '';
 						}
 
-						if ('editor' === calledAt) {
-							window.top.set_block_data_at_editor(onlyData, blockId);
-						} else {
-							window.top.setItemMetaData(onlyData, true);
-						}
-					} else if ('editor' === calledAt) {
-						window.top.set_block_data_at_editor(itemData, blockId);
+						postSelectedItem(onlyData, blockId, calledAt, true);
 					} else {
-						window.top.setItemMetaData(itemData, false);
+						postSelectedItem(itemData, blockId, calledAt, false);
 					}
-
-					window.parent.tb_remove();
 				});
 			})
 			.always(function () {

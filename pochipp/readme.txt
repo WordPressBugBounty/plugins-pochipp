@@ -3,7 +3,7 @@ Contributors: wppochipp
 Tags: affiliate, block
 Requires at least: 6.3
 Tested up to: 7.1
-Stable tag: 1.20.1
+Stable tag: 1.20.2
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -69,6 +69,10 @@ Terms: https://af.moshimo.com/af/www/terms/shop
 
 
 == Changelog ==
+
+= 1.20.2 =
+
+- thickboxから商品選択ができなくなる不具合の修正
 
 = 1.20.1 =
 
