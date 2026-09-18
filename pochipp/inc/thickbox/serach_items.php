@@ -14,9 +14,10 @@ $keyword = \POCHIPP::get_sanitized_data( $_GET, 'keyword', 'text', '' );
 
 // 各タブにおける共通パーツ
 $pochipp_url  = esc_url( POCHIPP_URL . 'assets/img/search-solid.svg' );
+$keyword_attr = esc_attr( $keyword );
 $common_parts = <<<HTML
 <div class="pchpp-tb__keywords">
-	<input id="keywords" type="text" name="keywords" placeholder="キーワードを入力してください" value="{$keyword}">
+	<input id="keywords" type="text" name="keywords" placeholder="キーワードを入力してください" value="{$keyword_attr}">
 	<button id="submit" class="button" type="submit" >
 		<img src="{$pochipp_url}" alt="" width="20" height="20" >
 	</button>
